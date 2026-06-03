@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
 import { motion } from 'framer-motion'
 import TestimonialCard from './TestimonialCard'
+import TestimonialMarqueeStrip from './TestimonialMarqueeStrip'
 import { testimonials, sectionCopy } from './testimonials'
 import './TestimonialsSection.css'
 
@@ -99,25 +100,9 @@ export default function TestimonialsSection() {
           viewport={{ once: true, margin: '-60px' }}
           variants={staggerContainer}
         >
-          <div className="testimonials-section__grid testimonials-section__grid--desktop">
-            <div className="testimonials-section__column">
-              {left.map((item) => (
-                <TestimonialCard
-                  key={item.id}
-                  testimonial={item}
-                  variants={cardVariant}
-                />
-              ))}
-            </div>
-            <div className="testimonials-section__column">
-              {right.map((item) => (
-                <TestimonialCard
-                  key={item.id}
-                  testimonial={item}
-                  variants={cardVariant}
-                />
-              ))}
-            </div>
+          <div className="testimonials-section__marquee testimonials-section__marquee--desktop">
+            <TestimonialMarqueeStrip items={left} direction="up" duration={36} />
+            <TestimonialMarqueeStrip items={right} direction="down" duration={42} />
           </div>
 
           <div className="testimonials-section__stack testimonials-section__stack--mobile">

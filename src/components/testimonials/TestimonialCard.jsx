@@ -12,19 +12,11 @@ function StarRating({ count = 5 }) {
   )
 }
 
-export default function TestimonialCard({ testimonial, variants }) {
+export default function TestimonialCard({ testimonial, variants, animated = true }) {
   const { name, role, content, rating, tags } = testimonial
 
-  return (
-    <motion.article
-      className="testimonial-card"
-      variants={variants}
-      whileHover={{
-        y: -6,
-        scale: 1.015,
-        transition: { duration: 0.35, ease: [0.22, 1, 0.36, 1] },
-      }}
-    >
+  const body = (
+    <>
       <header className="testimonial-card__header">
         <h3 className="testimonial-card__name">{name}</h3>
         <p className="testimonial-card__role">{role}</p>
@@ -43,6 +35,24 @@ export default function TestimonialCard({ testimonial, variants }) {
           ))}
         </footer>
       ) : null}
+    </>
+  )
+
+  if (!animated) {
+    return <article className="testimonial-card">{body}</article>
+  }
+
+  return (
+    <motion.article
+      className="testimonial-card"
+      variants={variants}
+      whileHover={{
+        y: -6,
+        scale: 1.015,
+        transition: { duration: 0.35, ease: [0.22, 1, 0.36, 1] },
+      }}
+    >
+      {body}
     </motion.article>
   )
 }
