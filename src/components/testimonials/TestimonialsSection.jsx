@@ -1,8 +1,11 @@
-import { useMemo } from 'react'
 import { motion } from 'framer-motion'
-import TestimonialCard from './TestimonialCard'
 import TestimonialMarqueeStrip from './TestimonialMarqueeStrip'
-import { testimonials, sectionCopy } from './testimonials'
+import {
+  testimonials,
+  productHuntTestimonials,
+  chromeWebStoreTestimonials,
+  sectionCopy,
+} from './testimonials'
 import './TestimonialsSection.css'
 
 const fadeUp = {
@@ -22,28 +25,7 @@ const staggerContainer = {
   },
 }
 
-const cardVariant = {
-  hidden: { opacity: 0, y: 24 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] },
-  },
-}
-
-function splitIntoColumns(items) {
-  const left = []
-  const right = []
-  items.forEach((item, index) => {
-    if (index % 2 === 0) left.push(item)
-    else right.push(item)
-  })
-  return { left, right }
-}
-
 export default function TestimonialsSection() {
-  const { left, right } = useMemo(() => splitIntoColumns(testimonials), [])
-
   const { label, headingLines, highlight, description, stats } = sectionCopy
 
   return (
@@ -101,18 +83,28 @@ export default function TestimonialsSection() {
           variants={staggerContainer}
         >
           <div className="testimonials-section__marquee testimonials-section__marquee--desktop">
-            <TestimonialMarqueeStrip items={left} direction="up" duration={36} />
-            <TestimonialMarqueeStrip items={right} direction="down" duration={42} />
+            <TestimonialMarqueeStrip
+              items={productHuntTestimonials}
+              direction="up"
+              duration={40}
+              label="Product Hunt reviews"
+            />
+            <TestimonialMarqueeStrip
+              items={chromeWebStoreTestimonials}
+              direction="down"
+              duration={44}
+              label="Chrome Web Store reviews"
+            />
           </div>
 
-          <div className="testimonials-section__stack testimonials-section__stack--mobile">
-            {testimonials.map((item) => (
-              <TestimonialCard
-                key={`mobile-${item.id}`}
-                testimonial={item}
-                variants={cardVariant}
-              />
-            ))}
+          <div className="testimonials-section__marquee testimonials-section__marquee--mobile">
+            <TestimonialMarqueeStrip
+              items={testimonials}
+              axis="horizontal"
+              direction="left"
+              duration={55}
+              label="Customer reviews"
+            />
           </div>
         </motion.div>
       </div>

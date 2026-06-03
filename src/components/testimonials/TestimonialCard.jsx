@@ -12,39 +12,41 @@ function StarRating({ count = 5 }) {
   )
 }
 
-export default function TestimonialCard({ testimonial, variants, animated = true }) {
-  const { name, role, content, rating, tags } = testimonial
+export default function TestimonialCard({
+  testimonial,
+  variants,
+  animated = true,
+  layout = 'vertical',
+}) {
+  const { author, quote, rating, platform } = testimonial
 
   const body = (
     <>
-      <header className="testimonial-card__header">
-        <h3 className="testimonial-card__name">{name}</h3>
-        <p className="testimonial-card__role">{role}</p>
-      </header>
-
       {rating ? <StarRating count={rating} /> : null}
 
-      <p className="testimonial-card__body">{content}</p>
+      <p className="testimonial-card__body">{quote}</p>
 
-      {tags?.length ? (
-        <footer className="testimonial-card__tags">
-          {tags.map((tag) => (
-            <span key={tag} className="testimonial-card__tag">
-              {tag}
-            </span>
-          ))}
-        </footer>
-      ) : null}
+      <footer className="testimonial-card__footer">
+        <h3 className="testimonial-card__name">{author}</h3>
+        <p className="testimonial-card__platform">{platform}</p>
+      </footer>
     </>
   )
 
+  const className = [
+    'testimonial-card',
+    layout === 'horizontal' ? 'testimonial-card--horizontal' : '',
+  ]
+    .filter(Boolean)
+    .join(' ')
+
   if (!animated) {
-    return <article className="testimonial-card">{body}</article>
+    return <article className={className}>{body}</article>
   }
 
   return (
     <motion.article
-      className="testimonial-card"
+      className={className}
       variants={variants}
       whileHover={{
         y: -6,
