@@ -191,11 +191,18 @@
 
 .testimonial-marquee__viewport {
   height: 100%;
-  overflow: hidden;
-  overscroll-behavior: none;
-  touch-action: none;
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior-y: contain;
+  touch-action: pan-y;
   padding: 20px 28px;
-  -webkit-overflow-scrolling: auto;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE 10+ */
+  cursor: grab;
+}
+
+.testimonial-marquee__viewport::-webkit-scrollbar {
+  display: none;
 }
 
 .testimonial-marquee--vertical {
@@ -329,6 +336,8 @@
 
 .testimonial-marquee--vertical .testimonial-marquee__item {
   width: 100%;
+  pointer-events: auto !important;
+  touch-action: pan-y !important;
 }
 
 .testimonial-marquee--horizontal .testimonial-marquee__item {
@@ -342,12 +351,12 @@
   inset: 12px 14px;
 }
 
-.testimonial-marquee__track--up {
-  animation: testimonial-marquee-up var(--marquee-duration, 38s) linear infinite;
-}
-
+.testimonial-marquee__track--up,
 .testimonial-marquee__track--down {
-  animation: testimonial-marquee-down var(--marquee-duration, 42s) linear infinite;
+  animation: none !important;
+  transform: none !important;
+  pointer-events: auto !important;
+  touch-action: pan-y !important;
 }
 
 .testimonial-marquee__track--h-left {

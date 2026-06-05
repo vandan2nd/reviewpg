@@ -4,16 +4,6 @@ import TestimonialCard from './TestimonialCard'
 const VERTICAL_DIRECTIONS = ['up', 'down']
 const HORIZONTAL_DIRECTIONS = ['left', 'right']
 
-function blockScroll(el) {
-  const stop = (e) => e.preventDefault()
-  el.addEventListener('wheel', stop, { passive: false })
-  el.addEventListener('touchmove', stop, { passive: false })
-  return () => {
-    el.removeEventListener('wheel', stop)
-    el.removeEventListener('touchmove', stop)
-  }
-}
-
 export default function TestimonialMarqueeStrip({
   items,
   direction = 'up',
@@ -23,29 +13,39 @@ export default function TestimonialMarqueeStrip({
 }) {
   const viewportRef = useRef(null)
   const isInteractingRef = useRef(false)
+  const isHoveredRef = useRef(false)
   const timeoutRef = useRef(null)
 
   const isVertical = axis === 'vertical'
 
+  // Auto-scroll loop for both vertical and horizontal axes
   useEffect(() => {
     const el = viewportRef.current
-    if (!el || !isVertical) return undefined
-    return blockScroll(el)
-  }, [isVertical])
-
-  // Auto-scroll loop for horizontal axis
-  useEffect(() => {
-    const el = viewportRef.current
-    if (!el || isVertical) return
+    if (!el) return
 
     let animationFrameId
     let lastTime = performance.now()
-    const speed = 35 // pixels per second
+    const speed = isVertical ? 25 : 35 // pixels per second
 
     const scrollLoop = (time) => {
-      if (viewportRef.current && !isInteractingRef.current) {
+      const container = viewportRef.current
+      if (container && !isInteractingRef.current && !isHoveredRef.current) {
         const delta = (time - lastTime) / 1000
-        viewportRef.current.scrollLeft += speed * delta
+        const scrollAmount = speed * delta
+
+        if (isVertical) {
+          if (direction === 'down') {
+            container.scrollTop -= scrollAmount
+          } else {
+            container.scrollTop += scrollAmount
+          }
+        } else {
+          if (direction === 'right') {
+            container.scrollLeft -= scrollAmount
+          } else {
+            container.scrollLeft += scrollAmount
+          }
+        }
       }
       lastTime = time
       animationFrameId = requestAnimationFrame(scrollLoop)
@@ -53,7 +53,7 @@ export default function TestimonialMarqueeStrip({
 
     animationFrameId = requestAnimationFrame(scrollLoop)
     return () => cancelAnimationFrame(animationFrameId)
-  }, [isVertical])
+  }, [isVertical, direction])
 
   if (!items.length) return null
 
@@ -92,48 +92,69 @@ export default function TestimonialMarqueeStrip({
 
   const handleScroll = () => {
     const container = viewportRef.current
-    if (!container || isVertical) return
+    if (!container) return
 
-    const maxScroll = container.scrollWidth / 2
-    if (container.scrollLeft >= maxScroll) {
-      container.scrollLeft -= maxScroll
-    } else if (container.scrollLeft <= 0) {
-      container.scrollLeft += maxScroll
+    if (isVertical) {
+      const maxScroll = container.scrollHeight / 2
+      if (container.scrollTop >= maxScroll) {
+        container.scrollTop -= maxScroll
+      } else if (container.scrollTop <= 2) {
+        container.scrollTop += maxScroll
+      }
+    } else {
+      const maxScroll = container.scrollWidth / 2
+      if (container.scrollLeft >= maxScroll) {
+        container.scrollLeft -= maxScroll
+      } else if (container.scrollLeft <= 2) {
+        container.scrollLeft += maxScroll
+      }
     }
   }
 
-  // Mouse drag-to-scroll implementation for horizontal mode
+  // Mouse drag-to-scroll implementation
   const isDraggingRef = useRef(false)
   const startXRef = useRef(0)
+  const startYRef = useRef(0)
   const scrollLeftRef = useRef(0)
+  const scrollTopRef = useRef(0)
 
   const handleMouseDown = (e) => {
-    if (isVertical) return
     const container = viewportRef.current
     if (!container) return
 
     startInteraction()
     isDraggingRef.current = true
-    startXRef.current = e.pageX - container.offsetLeft
-    scrollLeftRef.current = container.scrollLeft
+
+    if (isVertical) {
+      startYRef.current = e.pageY - container.offsetTop
+      scrollTopRef.current = container.scrollTop
+    } else {
+      startXRef.current = e.pageX - container.offsetLeft
+      scrollLeftRef.current = container.scrollLeft
+    }
     
     container.style.cursor = 'grabbing'
     document.body.style.userSelect = 'none'
   }
 
   const handleMouseMove = (e) => {
-    if (isVertical || !isDraggingRef.current) return
+    if (!isDraggingRef.current) return
     const container = viewportRef.current
     if (!container) return
 
     e.preventDefault()
-    const x = e.pageX - container.offsetLeft
-    const walk = (x - startXRef.current) * 1.5 // multiplier for drag sensitivity
-    container.scrollLeft = scrollLeftRef.current - walk
+    if (isVertical) {
+      const y = e.pageY - container.offsetTop
+      const walk = (y - startYRef.current) * 1.5 // drag sensitivity
+      container.scrollTop = scrollTopRef.current - walk
+    } else {
+      const x = e.pageX - container.offsetLeft
+      const walk = (x - startXRef.current) * 1.5
+      container.scrollLeft = scrollLeftRef.current - walk
+    }
   }
 
   const handleMouseUpOrLeave = () => {
-    if (isVertical) return
     if (isDraggingRef.current) {
       isDraggingRef.current = false
       const container = viewportRef.current
@@ -143,6 +164,15 @@ export default function TestimonialMarqueeStrip({
       document.body.style.userSelect = ''
       endInteraction()
     }
+  }
+
+  const handleMouseEnter = () => {
+    isHoveredRef.current = true
+  }
+
+  const handleMouseEnterLeave = () => {
+    isHoveredRef.current = false
+    handleMouseUpOrLeave()
   }
 
   return (
@@ -160,7 +190,8 @@ export default function TestimonialMarqueeStrip({
         onMouseDown={handleMouseDown}
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUpOrLeave}
-        onMouseLeave={handleMouseUpOrLeave}
+        onMouseLeave={handleMouseEnterLeave}
+        onMouseEnter={handleMouseEnter}
         onWheel={() => {
           startInteraction()
           endInteraction()
