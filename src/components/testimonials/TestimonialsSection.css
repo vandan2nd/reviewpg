@@ -234,6 +234,8 @@
 .testimonial-marquee--horizontal .testimonial-marquee__track {
   animation: none !important;
   transform: none !important;
+  pointer-events: auto !important;
+  touch-action: pan-x !important;
 }
 
 .testimonial-marquee__fade {
@@ -340,6 +342,8 @@
 .testimonial-marquee--horizontal .testimonial-marquee__item {
   width: clamp(280px, 82vw, 340px);
   padding: 12px 14px;
+  pointer-events: auto !important;
+  touch-action: pan-x !important;
 }
 
 .testimonial-marquee--horizontal .testimonial-marquee__item::before {
