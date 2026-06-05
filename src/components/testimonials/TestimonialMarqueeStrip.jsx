@@ -25,7 +25,7 @@ export default function TestimonialMarqueeStrip({
 
     let animationFrameId
     let lastTime = performance.now()
-    const speed = isVertical ? 25 : 35 // pixels per second
+    const speed = isVertical ? 15 : 22 // Reduced speeds to slow down the strips
 
     const scrollLoop = (time) => {
       const container = viewportRef.current
@@ -34,16 +34,34 @@ export default function TestimonialMarqueeStrip({
         const scrollAmount = speed * delta
 
         if (isVertical) {
+          const maxScroll = container.scrollHeight / 2
           if (direction === 'down') {
-            container.scrollTop -= scrollAmount
+            let nextScroll = container.scrollTop - scrollAmount
+            if (nextScroll <= 2) {
+              nextScroll += maxScroll
+            }
+            container.scrollTop = nextScroll
           } else {
-            container.scrollTop += scrollAmount
+            let nextScroll = container.scrollTop + scrollAmount
+            if (nextScroll >= maxScroll) {
+              nextScroll -= maxScroll
+            }
+            container.scrollTop = nextScroll
           }
         } else {
+          const maxScroll = container.scrollWidth / 2
           if (direction === 'right') {
-            container.scrollLeft -= scrollAmount
+            let nextScroll = container.scrollLeft - scrollAmount
+            if (nextScroll <= 2) {
+              nextScroll += maxScroll
+            }
+            container.scrollLeft = nextScroll
           } else {
-            container.scrollLeft += scrollAmount
+            let nextScroll = container.scrollLeft + scrollAmount
+            if (nextScroll >= maxScroll) {
+              nextScroll -= maxScroll
+            }
+            container.scrollLeft = nextScroll
           }
         }
       }
