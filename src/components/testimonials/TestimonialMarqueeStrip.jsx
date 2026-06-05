@@ -16,7 +16,16 @@ export default function TestimonialMarqueeStrip({
   const isHoveredRef = useRef(false)
   const timeoutRef = useRef(null)
 
-  const isVertical = axis === 'vertical'
+  // Reset interaction states if the window loses focus
+  useEffect(() => {
+    const handleBlur = () => {
+      isHoveredRef.current = false
+      isInteractingRef.current = false
+      isDraggingRef.current = false
+    }
+    window.addEventListener('blur', handleBlur)
+    return () => window.removeEventListener('blur', handleBlur)
+  }, [])
 
   // Auto-scroll loop for both vertical and horizontal axes
   useEffect(() => {
@@ -32,10 +41,10 @@ export default function TestimonialMarqueeStrip({
       if (container) {
         const maxScroll = isVertical ? container.scrollHeight / 2 : container.scrollWidth / 2
 
-        // Initialize to middle if at 0 on mount
-        if (isVertical && container.scrollTop === 0 && maxScroll > 0) {
+        // Initialize to middle if close to 0 on mount
+        if (isVertical && container.scrollTop <= 5 && maxScroll > 0) {
           container.scrollTop = maxScroll
-        } else if (!isVertical && container.scrollLeft === 0 && maxScroll > 0) {
+        } else if (!isVertical && container.scrollLeft <= 5 && maxScroll > 0) {
           container.scrollLeft = maxScroll
         }
 
@@ -176,7 +185,10 @@ export default function TestimonialMarqueeStrip({
   }
 
   const handleMouseEnter = () => {
-    isHoveredRef.current = true
+    // Only pause on hover if the device supports hover (e.g., desktops with a mouse)
+    if (window.matchMedia('(hover: hover)').matches) {
+      isHoveredRef.current = true
+    }
   }
 
   const handleMouseEnterLeave = () => {
