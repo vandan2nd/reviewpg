@@ -33,7 +33,7 @@ export const testimonials = [
   {
     id: 'combined_014',
     quote:
-      'I was skeptical about using another prompt enhancer at first. Velocity changes that narrative — this has saved 30% of my time. LLMs no longer require constant fight to understand context deeply. I would recommend everyone to use this for increasing your productivity.',
+      'I was skeptical about using another prompt enhancer at first, I though perhaps LLMs are smart enough to understand the query and return most relevant result. Velocity changes that narrative, and shows just how incredibly beneficial and productive a prompt enhancing tool can be - this has saved 30% of my time. LLMs no longer require constant fight ton understand context deeply- rather in one shot prompt I achieved more result than I would after 10 prompts. Anyone that uses Claude - knows how quickly tokens burn out - explaining context and solving issues fast ahs never been easier. I would recommend everyone to use this for increasing your productivity.',
     author: 'Siddhant',
     rating: 5,
     platform: 'Product Hunt',
@@ -42,7 +42,7 @@ export const testimonials = [
     id: 'combined_018',
     quote: 'Much required product. I love it',
     author: 'Gaayathri Murugan',
-    rating: 5,
+    rating: 4.5,
     platform: 'Product Hunt',
   },
   {
@@ -90,6 +90,45 @@ export const testimonials = [
     author: 'Parth Yadav',
     rating: 5,
     platform: 'Chrome Web Store',
+  },
+  {
+    id: 'combined_026',
+    quote:
+      "Smart move, this is the sort of platform which is only going to become more & more consistently used as AI expands to the general population!!\n\nIt's key that people learn these shortcuts & I think you've created a great platform to help them!\n\nGood luck w/ the launch Aakash & team :)",
+    author: 'Sam @CRANQ',
+    rating: 5,
+    platform: 'Product Hunt',
+  },
+  {
+    id: 'combined_027',
+    quote:
+      'there you go! finally someone released a product that will cancel all these digital notion bundles with ,,100000 prompts for ChatGPT" :D',
+    author: 'Valentine Sisman',
+    rating: 5,
+    platform: 'Product Hunt',
+  },
+  {
+    id: 'combined_028',
+    quote: 'I think this one will help me a lot.im intrested to be your beta user',
+    author: 'Yeganeh Nikzad',
+    rating: 5,
+    platform: 'Product Hunt',
+  },
+  {
+    id: 'combined_029',
+    quote:
+      "The ability to refine and enhance prompts for multiple LLMs with just one click is a huge productivity boost. It’s exciting to see tools that make AI interactions more intuitive and efficient. Can't wait to explore its potential—congrats on the launch! 🎉",
+    author: 'Junghwan Seo',
+    rating: 5,
+    platform: 'Product Hunt',
+  },
+  {
+    id: 'combined_030',
+    quote:
+      "I love Velocity! Even if you're not fluent in English, just provide key keywords, and it effortlessly transforms them into a well-phrased prompt. For example, if you type 'ReactJS login form, registration form, dashboards, authentication,' Velocity enhances it to 'How can I create a login form in ReactJS with validation?', 'How do I build a user registration form in ReactJS with form handling?', 'What are the best practices for creating dashboards in ReactJS?', and 'How do I implement authentication in a ReactJS application using JWT or Firebase?'. It's truly a game-changer for developers! 🚀✨I think not only for Developers it also a game changer for other professional to.",
+    author: 'BAN STONE',
+    rating: 5,
+    platform: 'Product Hunt',
   },
 ]
 

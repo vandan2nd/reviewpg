@@ -6,6 +6,7 @@ import {
   chromeWebStoreTestimonials,
   sectionCopy,
 } from './testimonials'
+import logoUrl from '../../assets/Logo.png'
 import './TestimonialsSection.css'
 
 const fadeUp = {
@@ -26,7 +27,7 @@ const staggerContainer = {
 }
 
 export default function TestimonialsSection() {
-  const { label, headingLines, highlight, description, stats } = sectionCopy
+  const { headingLines, highlight, description, stats } = sectionCopy
 
   return (
     <section className="testimonials-section" aria-labelledby="testimonials-heading">
@@ -41,9 +42,10 @@ export default function TestimonialsSection() {
           viewport={{ once: true, margin: '-80px' }}
           variants={staggerContainer}
         >
-          <motion.p className="testimonials-section__label" variants={fadeUp}>
-            {label}
-          </motion.p>
+          <motion.div className="testimonials-section__brand" variants={fadeUp}>
+            <img src={logoUrl} alt="Velocity Logo" className="testimonials-section__logo" />
+            <span className="testimonials-section__brand-name">Velocity</span>
+          </motion.div>
 
           <motion.h2
             id="testimonials-heading"
@@ -86,13 +88,13 @@ export default function TestimonialsSection() {
             <TestimonialMarqueeStrip
               items={productHuntTestimonials}
               direction="up"
-              duration={40}
+              duration={75}
               label="Product Hunt reviews"
             />
             <TestimonialMarqueeStrip
               items={chromeWebStoreTestimonials}
               direction="down"
-              duration={44}
+              duration={80}
               label="Chrome Web Store reviews"
             />
           </div>
