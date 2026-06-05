@@ -29,39 +29,32 @@ export default function TestimonialMarqueeStrip({
 
     const scrollLoop = (time) => {
       const container = viewportRef.current
-      if (container && !isInteractingRef.current && !isHoveredRef.current) {
-        const delta = (time - lastTime) / 1000
-        const scrollAmount = speed * delta
+      if (container) {
+        const maxScroll = isVertical ? container.scrollHeight / 2 : container.scrollWidth / 2
 
-        if (isVertical) {
-          const maxScroll = container.scrollHeight / 2
-          if (direction === 'down') {
-            let nextScroll = container.scrollTop - scrollAmount
-            if (nextScroll <= 2) {
-              nextScroll += maxScroll
+        // Initialize to middle if at 0 on mount
+        if (isVertical && container.scrollTop === 0 && maxScroll > 0) {
+          container.scrollTop = maxScroll
+        } else if (!isVertical && container.scrollLeft === 0 && maxScroll > 0) {
+          container.scrollLeft = maxScroll
+        }
+
+        if (!isInteractingRef.current && !isHoveredRef.current) {
+          const delta = (time - lastTime) / 1000
+          const scrollAmount = speed * delta
+
+          if (isVertical) {
+            if (direction === 'down') {
+              container.scrollTop -= scrollAmount
+            } else {
+              container.scrollTop += scrollAmount
             }
-            container.scrollTop = nextScroll
           } else {
-            let nextScroll = container.scrollTop + scrollAmount
-            if (nextScroll >= maxScroll) {
-              nextScroll -= maxScroll
+            if (direction === 'right') {
+              container.scrollLeft -= scrollAmount
+            } else {
+              container.scrollLeft += scrollAmount
             }
-            container.scrollTop = nextScroll
-          }
-        } else {
-          const maxScroll = container.scrollWidth / 2
-          if (direction === 'right') {
-            let nextScroll = container.scrollLeft - scrollAmount
-            if (nextScroll <= 2) {
-              nextScroll += maxScroll
-            }
-            container.scrollLeft = nextScroll
-          } else {
-            let nextScroll = container.scrollLeft + scrollAmount
-            if (nextScroll >= maxScroll) {
-              nextScroll -= maxScroll
-            }
-            container.scrollLeft = nextScroll
           }
         }
       }
@@ -112,20 +105,18 @@ export default function TestimonialMarqueeStrip({
     const container = viewportRef.current
     if (!container) return
 
-    if (isVertical) {
-      const maxScroll = container.scrollHeight / 2
-      if (container.scrollTop >= maxScroll) {
-        container.scrollTop -= maxScroll
-      } else if (container.scrollTop <= 2) {
-        container.scrollTop += maxScroll
-      }
-    } else {
-      const maxScroll = container.scrollWidth / 2
-      if (container.scrollLeft >= maxScroll) {
-        container.scrollLeft -= maxScroll
-      } else if (container.scrollLeft <= 2) {
-        container.scrollLeft += maxScroll
-      }
+    const maxScroll = isVertical ? container.scrollHeight / 2 : container.scrollWidth / 2
+    if (maxScroll <= 0) return
+
+    const currentScroll = isVertical ? container.scrollTop : container.scrollLeft
+
+    // Keep scroll position within [0.5 * maxScroll, 1.5 * maxScroll] to prevent clamp sticking
+    if (currentScroll >= 1.5 * maxScroll) {
+      if (isVertical) container.scrollTop = currentScroll - maxScroll
+      else container.scrollLeft = currentScroll - maxScroll
+    } else if (currentScroll <= 0.5 * maxScroll) {
+      if (isVertical) container.scrollTop = currentScroll + maxScroll
+      else container.scrollLeft = currentScroll + maxScroll
     }
   }
 
