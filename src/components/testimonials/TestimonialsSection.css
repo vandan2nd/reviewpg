@@ -261,19 +261,11 @@
 }
 
 .testimonial-marquee--horizontal .testimonial-marquee__fade--start {
-  top: 0;
-  bottom: 0;
-  left: 0;
-  width: 48px;
-  background: linear-gradient(to right, var(--testimonials-bg) 0%, transparent 100%);
+  display: none;
 }
 
 .testimonial-marquee--horizontal .testimonial-marquee__fade--end {
-  top: 0;
-  bottom: 0;
-  right: 0;
-  width: 48px;
-  background: linear-gradient(to left, var(--testimonials-bg) 0%, transparent 100%);
+  display: none;
 }
 
 .testimonial-marquee__track {
